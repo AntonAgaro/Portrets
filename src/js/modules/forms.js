@@ -1,11 +1,9 @@
 import {postData} from '../services/requests';
 
-const forms = () => {
+const forms = (state) => {
     const form = document.querySelectorAll('form'),
         inputs = document.querySelectorAll('input'),
-        upload = document.querySelectorAll('[name="upload"]');
-        
-    // checkNumInputs('input[name="user_phone"]');    
+        upload = document.querySelectorAll('[name="upload"]');  
     
     const message = {
         loading: 'Загрузка',
@@ -72,9 +70,13 @@ const forms = () => {
             let api;
             //Если форма содержит картинку  - формируем путь для дизайна
             item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
-            console.log(api);
-
-        
+            
+            //Добавляем в formData значение priceForm
+            if (item.classList.contains('calc_form')) {
+                for (let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
 
             postData(api, formData)
                 .then(res => {
